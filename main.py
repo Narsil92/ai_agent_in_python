@@ -1,4 +1,5 @@
 import os
+import argparse
 from dotenv import load_dotenv
 from openai import OpenAI 
 
@@ -21,30 +22,36 @@ client = OpenAI(
     api_key = api_key
     )
 
-# User Prompts:
+# User Prompts as Args:
 
-user_prompt = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
-
-
-# OpenRouter Response
-
-response = client.chat.completions.create(
-    model="openrouter/free",
-    messages=[
-        {
-            "role": "user",
-            "content": user_prompt,
-        }
-    ],
-)
-
+parser = argparse.ArgumentParser(description="Prompt to send to the LLM")
+parser.add_argument("prompt", type=str, help="Enter your prompt:")
+args = parser.parse_args()
+user_prompt= args.prompt
 
 
 def main():
-     print(f"User prompt: {user_prompt}")
-     print(f"Prompt tokens: {response.usage.prompt_tokens}")
-     print(f"Response tokens: {response.usage.completion_tokens}")
-     print(f"Response:\n{response.choices[0].message.content}")
+# User Prompts as Args:
+    parser = argparse.ArgumentParser(description="Prompt that user enter when running main.py")
+    parser.add_argument("prompt", type=str, help="Enter your prompt:")
+    args = parser.parse_args()
+    user_prompt= args.prompt
+
+    # OpenRouter Response
+    response = client.chat.completions.create(
+        model="openrouter/free",
+        messages=[
+            {
+            "role": "user",
+            "content": user_prompt,
+            }
+        ],
+        )
+     #Printing info to check if works
+    print(f"User prompt: {user_prompt}")
+    print(f"Prompt tokens: {response.usage.prompt_tokens}")
+    print(f"Response tokens: {response.usage.completion_tokens}")
+    print(f"Response:\n{response.choices[0].message.content}")
     
 
 if __name__ == "__main__":
