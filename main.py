@@ -21,6 +21,11 @@ client = OpenAI(
     api_key = api_key
     )
 
+# User Prompts:
+
+user_prompt = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
+
+
 # OpenRouter Response
 
 response = client.chat.completions.create(
@@ -28,14 +33,18 @@ response = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.",
+            "content": user_prompt,
         }
     ],
 )
 
 
+
 def main():
-     print(response.choices[0].message.content)
+     print(f"User prompt: {user_prompt}")
+     print(f"Prompt tokens: {response.usage.prompt_tokens}")
+     print(f"Response tokens: {response.usage.completion_tokens}")
+     print(f"Response:\n{response.choices[0].message.content}")
     
 
 if __name__ == "__main__":
