@@ -22,12 +22,14 @@ client = OpenAI(
     api_key = api_key
     )
 
-# User Prompts as Args:
 
-parser = argparse.ArgumentParser(description="Prompt to send to the LLM")
-parser.add_argument("prompt", type=str, help="Enter your prompt:")
-args = parser.parse_args()
-user_prompt= args.prompt
+
+# Helper Function that keep conversation track:
+def generate_content(client,messages):
+    return client.chat.completions.create(
+        model = "openrouter/free",
+        messages = messages,
+        )
 
 
 def main():
@@ -37,16 +39,15 @@ def main():
     args = parser.parse_args()
     user_prompt= args.prompt
 
+    # Keep track of conversation
+    messages = [
+        {"role":"user",
+         "content": user_prompt,
+         },
+         ]
+    
     # OpenRouter Response
-    response = client.chat.completions.create(
-        model="openrouter/free",
-        messages=[
-            {
-            "role": "user",
-            "content": user_prompt,
-            }
-        ],
-        )
+    response = generate_content(client,messages)
      #Printing info to check if works
     print(f"User prompt: {user_prompt}")
     print(f"Prompt tokens: {response.usage.prompt_tokens}")
