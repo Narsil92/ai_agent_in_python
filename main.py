@@ -36,7 +36,12 @@ def main():
 # User Prompts as Args:
     parser = argparse.ArgumentParser(description="Prompt that user enter when running main.py")
     parser.add_argument("prompt", type=str, help="Enter your prompt:")
+    
+    #Additional info about prompt if --verbose included 
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+    
     args = parser.parse_args()
+    
     user_prompt= args.prompt
 
     # Keep track of conversation
@@ -49,9 +54,11 @@ def main():
     # OpenRouter Response
     response = generate_content(client,messages)
      #Printing info to check if works
-    print(f"User prompt: {user_prompt}")
-    print(f"Prompt tokens: {response.usage.prompt_tokens}")
-    print(f"Response tokens: {response.usage.completion_tokens}")
+    if args.verbose:
+        print(f"User prompt: {user_prompt}")
+        print(f"Prompt tokens: {response.usage.prompt_tokens}")
+        print(f"Response tokens: {response.usage.completion_tokens}")
+        print(f"Response:\n{response.choices[0].message.content}")
     print(f"Response:\n{response.choices[0].message.content}")
     
 
